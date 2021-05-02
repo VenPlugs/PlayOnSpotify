@@ -1,8 +1,10 @@
 # Play On Spotify
 
-A powercord plugin that adds buttons to play/queue songs on Spotify to messages containing spotify urls
+A powercord plugin that Adds Play/Queue buttons to messages containing spotify embeds
 
-Supports songs, albums or playlists. However queue only works for songs
+Supports songs, albums or playlists. Queue is only available for songs.
+
+NOTE: This plugin uses the Spotify API wrapper from the pc-spotify module, so make sure you have that set up properly
 
 ![screenshot](https://owo.is-very.moe/8YLEZkx.png)
 
