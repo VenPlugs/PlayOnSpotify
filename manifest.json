@@ -1,0 +1,7 @@
+{
+  "author": "Vendicated",
+  "name": "PlayOnSpotify",
+  "description": "Adds buttons to play/queue on Spotify to messages containing spotify urls",
+  "version": "0.1.0",
+  "license": "GPL-3.0"
+}
