@@ -1,6 +1,7 @@
 # Play On Spotify
 
-A powercord plugin that Adds Play/Queue buttons to messages containing spotify embeds
+A powercord plugin that Adds Play/Queue buttons to messages containing spotify embeds. Clicking them will play or queue the songs on Spotify instead of playing the stupid preview in discord
+
 
 Supports songs, albums or playlists. Queue is only available for songs.
 
