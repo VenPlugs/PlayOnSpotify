@@ -1,8 +1,10 @@
-const { React, getModule } = require("powercord/webpack");
+const { React, getModule, getModuleByDisplayName } = require("powercord/webpack");
 const { post } = require("powercord/http");
 
 const { icon } = getModule(["icon", "isHeader"], false);
-const { button } = getModule(["button", "separator", "wrapper"], false);
+const Tooltip = getModuleByDisplayName("Tooltip", false);
+const { Button } = getModule(m => m.default && m.default.displayName === "MiniPopover", false);
+
 // teehee
 const SpotifyApi = require("../pc-spotify/SpotifyAPI");
 const { SPOTIFY_PLAYER_URL } = require("../pc-spotify/constants");
@@ -19,38 +21,58 @@ function notify(header, content, image) {
 
 module.exports.PlayButton = ({ data, thumb, title, description }) => {
   return (
-    <div className={button}>
-      <img
-        className={`emoji ${icon}`}
-        src="https://raw.githubusercontent.com/Vendicated/PowercordPlayOnSpotify/icons/play.svg"
-        onClick={() =>
-          SpotifyApi.play(data)
-            .then(() => notify(`Now playing ${title}`, description, thumb))
-            .catch(err => {
-              console.error("[PLAY-ON-SPOTIFY]", err);
-              notify("Sorry", "Something went wrong. Make sure your spotify is running.");
-            })
-        }
-      />
-    </div>
+    <Tooltip color="black" position="top" text="Play On Spotify">
+      {({ onMouseLeave, onMouseEnter }) => (
+        <Button
+          className={`playOnSpotifyButton`}
+          onClick={() =>
+            SpotifyApi.play(data)
+              .then(() => notify(`Now playing ${title}`, description, thumb))
+              .catch(err => {
+                console.error("[PLAY-ON-SPOTIFY]", err);
+                notify("Sorry", "Something went wrong. Make sure your spotify is running.");
+              })
+          }
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
+          <svg x="0" y="0" aria-hidden="false" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class={icon}>
+            <path d="M 11 0 C 4.925781 0 0 4.925781 0 11 C 0 17.074219 4.925781 22 11 22 C 17.074219 22 22 17.074219 22 11 C 21.992188 4.925781 17.074219 0.0078125 11 0 Z M 15.632812 11.351562 C 15.554688 11.503906 15.433594 11.628906 15.28125 11.703125 L 15.28125 11.707031 L 8.992188 14.851562 C 8.605469 15.042969 8.132812 14.886719 7.941406 14.5 C 7.886719 14.386719 7.855469 14.265625 7.855469 14.144531 L 7.855469 7.855469 C 7.855469 7.421875 8.207031 7.070312 8.640625 7.070312 C 8.765625 7.070312 8.886719 7.097656 8.992188 7.152344 L 15.28125 10.296875 C 15.667969 10.492188 15.824219 10.960938 15.632812 11.351562 Z M 15.632812 11.351562 " />
+          </svg>
+        </Button>
+      )}
+    </Tooltip>
   );
 };
 
 module.exports.QueueButton = ({ uri, thumb, title, description }) => {
   return (
-    <div className={button}>
-      <img
-        className={`emoji ${icon}`}
-        src="https://raw.githubusercontent.com/Vendicated/PowercordPlayOnSpotify/icons/queue.svg"
-        onClick={() =>
-          SpotifyApi.genericRequest(post(`${SPOTIFY_PLAYER_URL}/queue`).query("uri", uri), true)
-            .then(() => notify(`Queued ${title}`, description, thumb))
-            .catch(err => {
-              console.error("[PLAY-ON-SPOTIFY]", err);
-              notify("Sorry", "Something went wrong. Make sure your spotify is running");
-            })
-        }
-      />
-    </div>
+    <Tooltip color="black" position="top" text="Add To Queue">
+      {({ onMouseLeave, onMouseEnter }) => (
+        <Button
+          className={`queueOnSpotifyButton`}
+          onClick={() =>
+            SpotifyApi.genericRequest(post(`${SPOTIFY_PLAYER_URL}/queue`).query("uri", uri), true)
+              .then(() => notify(`Queued ${title}`, description, thumb))
+              .catch(err => {
+                console.error("[PLAY-ON-SPOTIFY]", err);
+                notify("Sorry", "Something went wrong. Make sure your spotify is running");
+              })
+          }
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
+          <svg x="0" y="0" aria-hidden="false" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class={icon}>
+            <g>
+              <path d="M 21.441406 7.453125 C 20.796875 6.128906 19.6875 5.386719 18.613281 4.671875 C 17.8125 4.132812 17.058594 3.628906 16.527344 2.90625 L 16.425781 2.769531 C 16.113281 2.347656 15.753906 1.867188 15.699219 1.46875 C 15.695312 1.433594 15.675781 1.40625 15.667969 1.375 C 15.652344 1.320312 15.636719 1.265625 15.613281 1.21875 C 15.59375 1.175781 15.566406 1.140625 15.539062 1.101562 C 15.503906 1.058594 15.472656 1.019531 15.433594 0.984375 C 15.394531 0.949219 15.351562 0.925781 15.308594 0.898438 C 15.265625 0.875 15.226562 0.855469 15.183594 0.839844 C 15.128906 0.816406 15.070312 0.808594 15.011719 0.804688 C 14.980469 0.800781 14.957031 0.789062 14.925781 0.789062 C 14.90625 0.789062 14.890625 0.796875 14.875 0.800781 C 14.855469 0.800781 14.835938 0.792969 14.816406 0.796875 C 14.785156 0.800781 14.757812 0.820312 14.722656 0.828125 C 14.671875 0.84375 14.621094 0.855469 14.574219 0.882812 C 14.527344 0.90625 14.492188 0.933594 14.453125 0.964844 C 14.414062 0.996094 14.375 1.027344 14.339844 1.066406 C 14.308594 1.105469 14.285156 1.144531 14.257812 1.1875 C 14.234375 1.230469 14.210938 1.273438 14.191406 1.324219 C 14.175781 1.371094 14.167969 1.421875 14.164062 1.476562 C 14.15625 1.507812 14.140625 1.539062 14.140625 1.574219 L 14.140625 15.570312 C 13.480469 15.171875 12.671875 14.925781 11.78125 14.925781 C 9.617188 14.925781 7.855469 16.335938 7.855469 18.070312 C 7.855469 19.800781 9.617188 21.210938 11.78125 21.210938 C 13.949219 21.210938 15.710938 19.800781 15.710938 18.070312 L 15.710938 8.914062 C 16.890625 9.363281 18.820312 10.511719 19.351562 13.195312 C 19.253906 13.339844 19.160156 13.5 19.050781 13.625 C 18.761719 13.949219 18.792969 14.445312 19.121094 14.730469 C 19.269531 14.863281 19.453125 14.925781 19.636719 14.925781 C 19.855469 14.925781 20.070312 14.835938 20.226562 14.660156 C 20.4375 14.421875 20.625 14.140625 20.800781 13.851562 C 20.824219 13.828125 20.839844 13.804688 20.855469 13.777344 C 21.492188 12.714844 21.910156 11.371094 21.992188 10.042969 C 22.042969 9.191406 21.851562 8.296875 21.441406 7.453125 Z M 11.78125 19.640625 C 10.503906 19.640625 9.425781 18.921875 9.425781 18.070312 C 9.425781 17.21875 10.503906 16.5 11.78125 16.5 C 13.058594 16.5 14.140625 17.21875 14.140625 18.070312 C 14.140625 18.921875 13.058594 19.640625 11.78125 19.640625 Z M 20.425781 9.945312 C 20.402344 10.3125 20.347656 10.679688 20.265625 11.039062 C 19.164062 8.824219 17.160156 7.667969 15.710938 7.242188 L 15.710938 4.355469 C 16.328125 5.011719 17.042969 5.503906 17.742188 5.972656 C 18.683594 6.601562 19.570312 7.199219 20.03125 8.140625 C 20.320312 8.730469 20.460938 9.375 20.425781 9.945312 Z M 20.425781 9.945312 " />
+              <path d="M 10.210938 0.789062 L 0.785156 0.789062 C 0.351562 0.789062 0 1.140625 0 1.574219 C 0 2.007812 0.351562 2.359375 0.785156 2.359375 L 10.210938 2.359375 C 10.644531 2.359375 10.996094 2.007812 10.996094 1.574219 C 10.996094 1.140625 10.644531 0.789062 10.210938 0.789062 Z M 10.210938 0.789062 " />
+              <path d="M 10.210938 5.5 L 0.785156 5.5 C 0.351562 5.5 0 5.851562 0 6.285156 C 0 6.71875 0.351562 7.074219 0.785156 7.074219 L 10.210938 7.074219 C 10.644531 7.074219 10.996094 6.71875 10.996094 6.285156 C 10.996094 5.851562 10.644531 5.5 10.210938 5.5 Z M 10.210938 5.5 " />
+              <path d="M 5.5 10.214844 L 0.785156 10.214844 C 0.351562 10.214844 0 10.566406 0 11 C 0 11.433594 0.351562 11.785156 0.785156 11.785156 L 5.5 11.785156 C 5.933594 11.785156 6.285156 11.433594 6.285156 11 C 6.285156 10.566406 5.933594 10.214844 5.5 10.214844 Z M 5.5 10.214844 " />
+              <path d="M 5.5 14.925781 L 0.785156 14.925781 C 0.351562 14.925781 0 15.28125 0 15.714844 C 0 16.148438 0.351562 16.5 0.785156 16.5 L 5.5 16.5 C 5.933594 16.5 6.285156 16.148438 6.285156 15.714844 C 6.285156 15.28125 5.933594 14.925781 5.5 14.925781 Z M 5.5 14.925781 " />
+            </g>
+          </svg>
+        </Button>
+      )}
+    </Tooltip>
   );
 };
