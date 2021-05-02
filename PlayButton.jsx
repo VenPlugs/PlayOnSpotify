@@ -21,7 +21,7 @@ module.exports.PlayButton = ({ data, thumb, title, description }) => {
   return (
     <div className={button}>
       <img
-        className={`emoji ${icon}`}
+        className={icon}
         src="https://raw.githubusercontent.com/Vendicated/PowercordPlayOnSpotify/icons/play.svg"
         onClick={() =>
           SpotifyApi.play(data)
@@ -40,7 +40,7 @@ module.exports.QueueButton = ({ uri, thumb, title, description }) => {
   return (
     <div className={button}>
       <img
-        className={`emoji ${icon}`}
+        className={icon}
         src="https://raw.githubusercontent.com/Vendicated/PowercordPlayOnSpotify/icons/queue.svg"
         onClick={() =>
           SpotifyApi.genericRequest(post(`${SPOTIFY_PLAYER_URL}/queue`).query("uri", uri), true)
