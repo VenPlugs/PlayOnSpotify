@@ -44,7 +44,6 @@ module.exports = class PlayOnSpotify extends Plugin {
         rawTitle: title
       } = embed;
 
-      console.log(embed);
       const [, , type, id] = url.match(/(https?:\/\/)?open.spotify.com\/(album|track|playlist)\/([^?]+)/) ?? [];
       if (!type || !id) return res;
 
