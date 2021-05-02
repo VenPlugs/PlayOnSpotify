@@ -10,4 +10,10 @@ NOTE: This plugin uses the Spotify API wrapper from the pc-spotify module, so ma
 
 ![screenshot](https://uwu.whats-th.is/7g3WDkM.png)
 
-[Icon Credit](https://github.com/Vendicated/PowercordPlayOnSpotify/blob/icons/README.md)
+---
+
+### Icon Credit
+
+Queue Icon made by Pixel perfect from www.flaticon.com
+
+Play Icon made by Freepik from www.flaticon.com
