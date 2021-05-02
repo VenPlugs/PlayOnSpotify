@@ -22,7 +22,7 @@ module.exports.PlayButton = ({ data, thumb, title, description }) => {
     <div className={button}>
       <img
         className={`emoji ${icon}`}
-        src="/assets/9fa9d42fbc4405fdca021e2fe9e5c4e2.svg"
+        src="https://raw.githubusercontent.com/Vendicated/PowercordPlayOnSpotify/icons/play.svg"
         onClick={() =>
           SpotifyApi.play(data)
             .then(() => notify(`Now playing ${title}`, description, thumb))
@@ -41,7 +41,7 @@ module.exports.QueueButton = ({ uri, thumb, title, description }) => {
     <div className={button}>
       <img
         className={`emoji ${icon}`}
-        src="/assets/9a43e631d506ae4818ecefc825dc02ad.svg"
+        src="https://raw.githubusercontent.com/Vendicated/PowercordPlayOnSpotify/icons/queue.svg"
         onClick={() =>
           SpotifyApi.genericRequest(post(`${SPOTIFY_PLAYER_URL}/queue`).query("uri", uri), true)
             .then(() => notify(`Queued ${title}`, description, thumb))
