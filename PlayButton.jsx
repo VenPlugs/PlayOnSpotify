@@ -28,7 +28,7 @@ module.exports.PlayButton = ({ data, thumb, title, description }) => {
             .then(() => notify(`Now playing ${title}`, description, thumb))
             .catch(err => {
               console.error("[PLAY-ON-SPOTIFY]", err);
-              notify("Sorry", "Something went wrong. Make sure your spotify is running.);
+              notify("Sorry", "Something went wrong. Make sure your spotify is running.");
             })
         }
       />
