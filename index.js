@@ -30,7 +30,7 @@ module.exports = class PlayOnSpotify extends Plugin {
     inject("playInSpotify", MiniPopover, "default", (_, res) => {
       if (!isSpotifyPremium) return res;
 
-      const msg = findInReactTree(res, r => r && r.message && r.setPopout)?.message;
+      const msg = findInReactTree(res, r => r && r.message)?.message;
       if (!msg) return res;
 
       const embed = msg.embeds.find(e => e.provider?.name === "Spotify");
