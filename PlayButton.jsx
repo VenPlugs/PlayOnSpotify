@@ -7,15 +7,12 @@
  */
 
 const { React, getModule, getModuleByDisplayName } = require("powercord/webpack");
-const { post } = require("powercord/http");
 
 const { icon } = getModule(["icon", "isHeader"], false);
 const Tooltip = getModuleByDisplayName("Tooltip", false);
 const { Button } = getModule(m => m.default && m.default.displayName === "MiniPopover", false);
 
-// teehee
-const SpotifyApi = require("../pc-spotify/SpotifyAPI");
-const { SPOTIFY_PLAYER_URL } = require("../pc-spotify/constants");
+const { play, queue, SpotifyError } = require("./api")
 
 function notify(header, content, image) {
   powercord.api.notices.sendToast("playOnSpotify", {
@@ -27,19 +24,25 @@ function notify(header, content, image) {
   });
 }
 
+function handleErr(err) {
+  if (err instanceof SpotifyError) {
+      notify("Link Spotify", err.message);
+  } else {
+      console.error("[PLAY-ON-SPOTIFY]", err);
+      notify("Sorry", "Something went wrong. Make sure your spotify is running.");
+  }
+}
+
 module.exports.PlayButton = ({ data, thumb, title, description }) => {
   return (
     <Tooltip color="black" position="top" text="Play On Spotify">
       {({ onMouseLeave, onMouseEnter }) => (
         <Button
           className={`playOnSpotifyButton`}
-          onClick={() =>
-            SpotifyApi.play(data)
+          onClick={() => 
+            play(data)
               .then(() => notify(`Now playing ${title}`, description, thumb))
-              .catch(err => {
-                console.error("[PLAY-ON-SPOTIFY]", err);
-                notify("Sorry", "Something went wrong. Make sure your spotify is running.");
-              })
+              .catch(handleErr)
           }
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
@@ -60,12 +63,9 @@ module.exports.QueueButton = ({ uri, thumb, title, description }) => {
         <Button
           className={`queueOnSpotifyButton`}
           onClick={() =>
-            SpotifyApi.genericRequest(post(`${SPOTIFY_PLAYER_URL}/queue`).query("uri", uri), true)
+            queue(uri)
               .then(() => notify(`Queued ${title}`, description, thumb))
-              .catch(err => {
-                console.error("[PLAY-ON-SPOTIFY]", err);
-                notify("Sorry", "Something went wrong. Make sure your spotify is running");
-              })
+              .catch(handleErr)
           }
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
