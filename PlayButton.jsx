@@ -26,7 +26,7 @@ function notify(header, content, image) {
 
 function handleErr(err) {
   if (err instanceof SpotifyError) {
-      notify("Link Spotify", err.message);
+      notify("Uh Oh!", err.message);
   } else {
       console.error("[PLAY-ON-SPOTIFY]", err);
       notify("Sorry", "Something went wrong. Make sure your spotify is running.");
